@@ -9,9 +9,10 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
+        <!-- Change the Home link to Addresses -->
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-map" aria-hidden="true"></span> Addresses
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -24,6 +25,18 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </div>
+        <!-- Add the following lines for the Books page -->
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="books">
+                <span class="oi oi-book" aria-hidden="true"></span> Books
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+    <NavLink class="nav-link" href="creditcards">
+        <span class="oi oi-credit-card" aria-hidden="true"></span> Credit Cards
+    </NavLink>
+</div>
     </nav>
 </div>
 

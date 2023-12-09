@@ -1,0 +1,87 @@
+﻿@page "/creditcards"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Datum
+    {
+        public string type { get; set; }
+        public string number { get; set; }
+        public string expiration { get; set; }
+        public string owner { get; set; }
+    }
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> creditCardData;
+
+    private async Task LoadCreditCardData()
+    {
+        try
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync("https://fakerapi.it/api/v1/credit_cards?_quantity=100");
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            creditCardData = myDeserializedClass.data;
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Credit Card Data</h3>
+
+<button @onclick="LoadCreditCardData">Load Credit Card Data</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (creditCardData != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Number</th>
+                <th>Expiration</th>
+                <th>Owner</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var card in creditCardData)
+            {
+                <tr>
+                    <td>@card.type</td>
+                    <td>@card.number</td>
+                    <td>@card.expiration</td>
+                    <td>@card.owner</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No data loaded. Click the "Load Credit Card Data" button to load credit card data.</p>
+}

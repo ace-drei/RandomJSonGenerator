@@ -1,0 +1,92 @@
+﻿@page "/books"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Datum
+    {
+        public int id { get; set; }
+        public string title { get; set; }
+        public string author { get; set; }
+        public string genre { get; set; }
+        public string description { get; set; }
+        public string isbn { get; set; }
+        public string image { get; set; }
+        public string published { get; set; }
+        public string publisher { get; set; }
+    }
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> bookData;
+
+    private async Task LoadBookData()
+    {
+        try
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync("https://fakerapi.it/api/v1/books?_quantity=100");
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            bookData = myDeserializedClass.data;
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Book Data</h3>
+
+<button @onclick="LoadBookData">Load Book Data</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (bookData != null)
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var book in bookData)
+            {
+                        <tr>
+                            <td>@book.id</td>
+                            <td>@book.title</td>
+                            <td>@book.author</td>
+                            <td>@book.genre</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+else
+{
+        <p>No data loaded. Click the "Load Book Data" button to load book data.</p>
+}
