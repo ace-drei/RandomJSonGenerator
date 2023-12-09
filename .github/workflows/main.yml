@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy-to-github-pages:
+    # use ubuntu-latest image to run steps on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Set write permissions for contents
+      packages: write  # Assuming you need write access for packages as well
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4.0.0
+        with:
+          dotnet-version: 8.0.100
+      - name: Publish .NET Core Project
+        run: dotnet publish -c Release -o release --nologo
+      - name: Change base tag in index.html to / to ca3Esports
+        run: sed -i 's/<base href="\/" \/>/<base href="\/ca3Esports\/" \/>/g' release/wwwroot/index.html
+      - name: Add nojekyll file
+        run: touch release/wwwroot/.nojekyll
+      - name: Commit wwwroot to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+            ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+            BASE_BRANCH: main # The branch the action should deploy from.
+            BRANCH: gh-pages # The branch the action should deploy to.
+            FOLDER: release/wwwroot # The folder the action should deploy.
+            SINGLE_COMMIT: true
