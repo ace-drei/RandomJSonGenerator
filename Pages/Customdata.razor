@@ -27,6 +27,34 @@
         public string company_name { get; set; }
         public int counter { get; set; }
         public string card_number { get; set; }
+        public string country { get; set; }
+        public string countryCode { get; set; }
+        public string country_code { get; set; }
+        public string date { get; set; }
+        public DateTime dateTime { get; set; }
+        public string ean { get; set; }
+        public string email { get; set; }
+        public string image { get; set; }
+        public string lastName { get; set; }
+        public string last_name { get; set; }
+        public double latitude { get; set; }
+        public string longText { get; set; }
+        public string long_text { get; set; }
+        public double longitude { get; set; }
+        public string nullValue { get; set; }
+        public int number { get; set; }
+        public string phone { get; set; }
+        public string pokemon { get; set; }
+        public string postcode { get; set; }
+        public string state { get; set; }
+        public string streetAddress { get; set; }
+        public string street_name { get; set; }
+        public string text { get; set; }
+        public string upc { get; set; }
+        public string uuid { get; set; }
+        public string vat { get; set; }
+        public string website { get; set; }
+        public string word { get; set; }
     }
 
     public class Root
@@ -54,7 +82,35 @@
         { "city", "city" },
         { "company_name", "company_name" },
         { "counter", "counter" },
-        { "card_number", "card_number" }
+        { "card_number", "card_number" },
+        { "country", "country" },
+        { "countryCode", "countryCode" },
+        { "country_code", "country_code" },
+        { "date", "date" },
+        { "dateTime", "dateTime" },
+        { "ean", "ean" },
+        { "email", "email" },
+        { "image", "image" },
+        { "lastName", "lastName" },
+        { "last_name", "last_name" },
+        { "latitude", "latitude" },
+        { "longText", "longText" },
+        { "long_text", "long_text" },
+        { "longitude", "longitude" },
+        { "nullValue", "null" },
+        { "number", "number" },
+        { "phone", "phone" },
+        { "pokemon", "pokemon" },
+        { "postcode", "postcode" },
+        { "state", "state" },
+        { "streetAddress", "streetAddress" },
+        { "street_name", "street_name" },
+        { "text", "text" },
+        { "upc", "upc" },
+        { "uuid", "uuid" },
+        { "vat", "vat" },
+        { "website", "website" },
+        { "word", "word" }
     };
 
     private Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>
@@ -73,7 +129,35 @@
         { "city", false },
         { "company_name", false },
         { "counter", false },
-        { "card_number", false }
+        { "card_number", false },
+        { "country", false },
+        { "countryCode", false },
+        { "country_code", false },
+        { "date", false },
+        { "dateTime", false },
+        { "ean", false },
+        { "email", false },
+        { "image", false },
+        { "lastName", false },
+        { "last_name", false },
+        { "latitude", false },
+        { "longText", false },
+        { "long_text", false },
+        { "longitude", false },
+        { "nullValue", false },
+        { "number", false },
+        { "phone", false },
+        { "pokemon", false },
+        { "postcode", false },
+        { "state", false },
+        { "streetAddress", false },
+        { "street_name", false },
+        { "text", false },
+        { "upc", false },
+        { "uuid", false },
+        { "vat", false },
+        { "website", false },
+        { "word", false }
     };
 
     private int quantity = 5; // Default quantity
@@ -143,57 +227,210 @@
     {
                 <div>
                     <h4>@item.name @item.surname</h4>
+
             @if (checkboxStates["from"])
             {
-                <p>From: @item.from</p>
+                            <p>From: @item.country</p>
             }
+
             @if (checkboxStates["birthday"])
             {
-                <p>Birthday: @item.birthday</p>
+                            <p>Birthday: @item.date</p>
             }
+
             @if (checkboxStates["vatId"])
             {
-                <p>VatId: @item.vatId</p>
+                            <p>VatId: @item.vatId</p>
             }
+
             @if (checkboxStates["boolean"])
             {
-                <p>Boolean: @item.boolean</p>
+                            <p>Boolean: @item.boolean</p>
             }
+
             @if (checkboxStates["boolean_digit"])
             {
-                <p>Boolean Digit: @item.boolean_digit</p>
+                            <p>Boolean Digit: @item.boolean_digit</p>
             }
+
             @if (checkboxStates["buildingNumber"])
             {
-                <p>Building Number: @item.buildingNumber</p>
+                            <p>Building Number: @item.buildingNumber</p>
             }
+
             @if (checkboxStates["building_number"])
             {
-                <p>Building Number (Underscore): @item.building_number</p>
+                            <p>Building Number (Underscore): @item.building_number</p>
             }
+
             @if (checkboxStates["card_expiration"])
             {
-                <p>Card Expiration: @item.card_expiration</p>
+                            <p>Card Expiration: @item.card_expiration</p>
             }
+
             @if (checkboxStates["card_type"])
             {
-                <p>Card Type: @item.card_type</p>
+                            <p>Card Type: @item.card_type</p>
             }
+
             @if (checkboxStates["city"])
             {
-                <p>City: @item.city</p>
+                            <p>City: @item.city</p>
             }
+
             @if (checkboxStates["company_name"])
             {
-                <p>Company Name: @item.company_name</p>
+                            <p>Company Name: @item.company_name</p>
             }
+
             @if (checkboxStates["counter"])
             {
-                <p>Counter: @item.counter</p>
+                            <p>Counter: @item.counter</p>
             }
+
             @if (checkboxStates["card_number"])
             {
-                <p>Card Number: @item.card_number</p>
+                            <p>Card Number: @item.card_number</p>
+            }
+
+            @if (checkboxStates["country"])
+            {
+                            <p>Country: @item.country</p>
+            }
+
+            @if (checkboxStates["countryCode"])
+            {
+                            <p>Country Code: @item.countryCode</p>
+            }
+
+            @if (checkboxStates["country_code"])
+            {
+                            <p>Country Code (Underscore): @item.country_code</p>
+            }
+
+            @if (checkboxStates["date"])
+            {
+                            <p>Date: @item.date</p>
+            }
+
+            @if (checkboxStates["dateTime"])
+            {
+                            <p>DateTime: @item.dateTime.Date @item.dateTime.ToString("HH:mm:ss") @item.dateTime.ToString("zzz")</p>
+            }
+
+            @if (checkboxStates["ean"])
+            {
+                            <p>EAN: @item.ean</p>
+            }
+
+            @if (checkboxStates["email"])
+            {
+                            <p>Email: @item.email</p>
+            }
+
+            @if (checkboxStates["image"])
+            {
+                            <p>Image: @item.image</p>
+            }
+
+            @if (checkboxStates["lastName"])
+            {
+                            <p>Last Name: @item.lastName</p>
+            }
+
+            @if (checkboxStates["last_name"])
+            {
+                            <p>Last Name (Underscore): @item.last_name</p>
+            }
+
+            @if (checkboxStates["latitude"])
+            {
+                            <p>Latitude: @item.latitude</p>
+            }
+
+            @if (checkboxStates["longText"])
+            {
+                            <p>Long Text: @item.longText</p>
+            }
+
+            @if (checkboxStates["long_text"])
+            {
+                            <p>Long Text (Underscore): @item.long_text</p>
+            }
+
+            @if (checkboxStates["longitude"])
+            {
+                            <p>Longitude: @item.longitude</p>
+            }
+
+            @if (checkboxStates["nullValue"])
+            {
+                            <p>Null Value: @item.nullValue</p>
+            }
+
+            @if (checkboxStates["number"])
+            {
+                            <p>Number: @item.number</p>
+            }
+
+            @if (checkboxStates["phone"])
+            {
+                            <p>Phone: @item.phone</p>
+            }
+
+            @if (checkboxStates["pokemon"])
+            {
+                            <p>Pokemon: @item.pokemon</p>
+            }
+
+            @if (checkboxStates["postcode"])
+            {
+                            <p>Postcode: @item.postcode</p>
+            }
+
+            @if (checkboxStates["state"])
+            {
+                            <p>State: @item.state</p>
+            }
+
+            @if (checkboxStates["streetAddress"])
+            {
+                            <p>Street Address: @item.streetAddress</p>
+            }
+
+            @if (checkboxStates["street_name"])
+            {
+                            <p>Street Name: @item.street_name</p>
+            }
+
+            @if (checkboxStates["text"])
+            {
+                            <p>Text: @item.text</p>
+            }
+
+            @if (checkboxStates["upc"])
+            {
+                            <p>UPC: @item.upc</p>
+            }
+
+            @if (checkboxStates["uuid"])
+            {
+                            <p>UUID: @item.uuid</p>
+            }
+
+            @if (checkboxStates["vat"])
+            {
+                            <p>VAT: @item.vat</p>
+            }
+
+            @if (checkboxStates["website"])
+            {
+                            <p>Website: @item.website</p>
+            }
+
+            @if (checkboxStates["word"])
+            {
+                            <p>Word: @item.word</p>
             }
                 </div>
     }
