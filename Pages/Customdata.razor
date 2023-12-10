@@ -20,6 +20,8 @@
         public bool boolean { get; set; }
         public int boolean_digit { get; set; }
         public string buildingNumber { get; set; }
+        public string building_number { get; set; }
+        public string card_expiration { get; set; }
     }
 
     public class Root
@@ -40,7 +42,9 @@
         { "vatId", "vat" },
         { "boolean", "boolean" },
         { "boolean_digit", "boolean_digit" },
-        { "buildingNumber", "buildingNumber" }
+        { "buildingNumber", "buildingNumber" },
+        { "building_number", "building_number" },
+        { "card_expiration", "card_expiration" }
     };
 
     private Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>
@@ -52,10 +56,12 @@
         { "vatId", false },
         { "boolean", false },
         { "boolean_digit", false },
-        { "buildingNumber", false }
+        { "buildingNumber", false },
+        { "building_number", false },
+        { "card_expiration", false }
     };
 
-    private int quantity = 100; // Default quantity
+    private int quantity = 5; // Default quantity
 
     private async Task LoadCustomData()
     {
@@ -145,6 +151,14 @@
             @if (checkboxStates["buildingNumber"])
             {
                 <p>Building Number: @item.buildingNumber</p>
+            }
+            @if (checkboxStates["building_number"])
+            {
+                <p>Building Number (Underscore): @item.building_number</p>
+            }
+            @if (checkboxStates["card_expiration"])
+            {
+                <p>Card Expiration: @item.card_expiration</p>
             }
                 </div>
     }
