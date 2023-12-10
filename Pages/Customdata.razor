@@ -1,0 +1,118 @@
+﻿@page "/custom"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Datum
+    {
+        public string name { get; set; }
+        public string surname { get; set; }
+        public string from { get; set; }
+        public string birthday { get; set; }
+        public string vatId { get; set; }
+    }
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> customData;
+    private Dictionary<string, string> parameterMappings = new Dictionary<string, string>
+    {
+        { "name", "firstName" },
+        { "surname", "lastName" },
+        { "from", "country" },
+        { "birthday", "date" },
+        { "vatId", "vat" }
+    };
+
+    private Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>
+    {
+        { "name", false },
+        { "surname", false },
+        { "from", false },
+        { "birthday", false },
+        { "vatId", false }
+    };
+
+    private async Task LoadCustomData()
+    {
+        try
+        {
+            var selectedParameters = parameterMappings
+                .Where(kv => checkboxStates[kv.Key])
+                .Select(kv => $"{kv.Key}={kv.Value}");
+
+            var parameters = string.Join("&", selectedParameters);
+
+            var apiUrl = $"https://fakerapi.it/api/v1/custom?_quantity=100&{parameters}";
+            var client = new HttpClient();
+            var response = await client.GetAsync(apiUrl);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            customData = myDeserializedClass.data;
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(customData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Custom Data</h3>
+
+@foreach (var parameter in parameterMappings)
+{
+        <div>
+            <label>
+                <input type="checkbox" @bind="checkboxStates[parameter.Key]" />
+            @parameter.Key
+            </label>
+        </div>
+}
+
+<button @onclick="LoadCustomData">Load Custom Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (customData != null)
+{
+    @foreach (var item in customData)
+    {
+                <div>
+                    <h4>@item.name @item.surname</h4>
+                    <p>From: @item.from</p>
+                    <p>Birthday: @item.birthday</p>
+                    <p>VatId: @item.vatId</p>
+                </div>
+    }
+}
+else
+{
+        <p>No data loaded. Click the "Load Custom Data" button to load custom data.</p>
+}

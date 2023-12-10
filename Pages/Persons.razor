@@ -1,0 +1,116 @@
+﻿@page "/persons"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Address
+    {
+        public int id { get; set; }
+        public string street { get; set; }
+        public string streetName { get; set; }
+        public string buildingNumber { get; set; }
+        public string city { get; set; }
+        public string zipcode { get; set; }
+        public string country { get; set; }
+        public string county_code { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+    }
+
+    public class Datum
+    {
+        public int id { get; set; }
+        public string firstname { get; set; }
+        public string lastname { get; set; }
+        public string email { get; set; }
+        public string phone { get; set; }
+        public string birthday { get; set; }
+        public string gender { get; set; }
+        public Address address { get; set; }
+        public string website { get; set; }
+        public string image { get; set; }
+    }
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> personData;
+    private int quantity = 100;
+    private string gender = "male";
+    private DateTime birthstart = new DateTime(2005, 01, 01);
+
+    private async Task LoadPersonData()
+    {
+        try
+        {
+            var apiUrl = $"https://fakerapi.it/api/v1/persons?_quantity={quantity}&_gender={gender}&_birthday_start={birthstart:yyyy-MM-dd}";
+            var client = new HttpClient();
+            var response = await client.GetAsync(apiUrl);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            personData = myDeserializedClass.data;
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(personData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Person Data</h3>
+
+<label for="quantity">Quantity:</label>
+<input type="number" id="quantity" @bind="quantity" />
+
+<label for="gender">Gender:</label>
+<input type="text" id="gender" @bind="gender" />
+
+<label for="birthstart">Birth Start:</label>
+<input type="date" id="birthstart" @bind="birthstart" />
+
+<button @onclick="LoadPersonData">Load Person Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (personData != null)
+{
+    @foreach (var person in personData)
+    {
+                <div>
+                    <h4>@person.firstname @person.lastname</h4>
+                    <p>@person.email</p>
+                    <p>@person.birthday</p>
+                    <p>@person.gender</p>
+                </div>
+    }
+}
+else
+{
+        <p>No data loaded. Click the "Load Person Data" button to load person data.</p>
+}

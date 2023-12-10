@@ -5,6 +5,7 @@
 @using System.Collections.Generic
 @using System.Threading.Tasks
 @using System
+@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
 @code {
@@ -26,12 +27,15 @@
 
     private List<Datum> creditCardData;
 
+    private string quantity = "100"; // Default value
+
     private async Task LoadCreditCardData()
     {
         try
         {
             var client = new HttpClient();
-            var response = await client.GetAsync("https://fakerapi.it/api/v1/credit_cards?_quantity=100");
+            var apiUrl = $"https://fakerapi.it/api/v1/credit_cards?_quantity={quantity}";
+            var response = await client.GetAsync(apiUrl);
             response.EnsureSuccessStatusCode();
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -46,6 +50,12 @@
         }
     }
 
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(creditCardData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
     private void NavigateToHome()
     {
         NavigationManager.NavigateTo("https://localhost:7293/");
@@ -54,7 +64,13 @@
 
 <h3>Credit Card Data</h3>
 
+<div class="form-group">
+    <label for="quantityInput">Quantity:</label>
+    <input type="text" class="form-control" id="quantityInput" @bind="quantity" />
+</div>
+
 <button @onclick="LoadCreditCardData">Load Credit Card Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
 <button @onclick="NavigateToHome">Home</button>
 
 @if (creditCardData != null)

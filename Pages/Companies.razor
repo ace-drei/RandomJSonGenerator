@@ -1,0 +1,139 @@
+﻿@page "/companies"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Address
+    {
+        public int id { get; set; }
+        public string street { get; set; }
+        public string streetName { get; set; }
+        public string buildingNumber { get; set; }
+        public string city { get; set; }
+        public string zipcode { get; set; }
+        public string country { get; set; }
+        public string county_code { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+    }
+
+    public class Contact
+    {
+        public int id { get; set; }
+        public string firstname { get; set; }
+        public string lastname { get; set; }
+        public string email { get; set; }
+        public string phone { get; set; }
+        public string birthday { get; set; }
+        public string gender { get; set; }
+        public Address address { get; set; }
+        public string website { get; set; }
+        public string image { get; set; }
+    }
+
+    public class Datum
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string vat { get; set; }
+        public string phone { get; set; }
+        public string country { get; set; }
+        public List<Address> addresses { get; set; }
+        public string website { get; set; }
+        public string image { get; set; }
+        public Contact contact { get; set; }
+    }
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> companyData;
+    private string inputParameter = "100"; // Default value
+
+    private async Task LoadCompanyData()
+    {
+        try
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync($"https://fakerapi.it/api/v1/companies?_quantity={inputParameter}");
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            companyData = myDeserializedClass.data;
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(companyData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Company Data</h3>
+
+<div>
+    <label for="quantityInput">Enter Quantity:</label>
+    <input id="quantityInput" type="number" @bind="inputParameter" />
+</div>
+
+<button @onclick="LoadCompanyData">Load Company Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (companyData != null)
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>VAT</th>
+                    <th>Phone</th>
+                    <th>Country</th>
+                    <th>Website</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var company in companyData)
+            {
+                        <tr>
+                            <td>@company.name</td>
+                            <td>@company.email</td>
+                            <td>@company.vat</td>
+                            <td>@company.phone</td>
+                            <td>@company.country</td>
+                            <td>@company.website</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+else
+{
+        <p>No data loaded. Click the "Load Company Data" button to load company data.</p>
+}

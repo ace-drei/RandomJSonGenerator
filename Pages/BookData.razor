@@ -5,6 +5,7 @@
 @using System.Collections.Generic
 @using System.Threading.Tasks
 @using System
+@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
 @code {
@@ -30,13 +31,14 @@
     }
 
     private List<Datum> bookData;
+    private string quantityInput = "100"; // Default quantity
 
     private async Task LoadBookData()
     {
         try
         {
             var client = new HttpClient();
-            var response = await client.GetAsync("https://fakerapi.it/api/v1/books?_quantity=100");
+            var response = await client.GetAsync($"https://fakerapi.it/api/v1/books?_quantity={quantityInput}");
             response.EnsureSuccessStatusCode();
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -51,6 +53,12 @@
         }
     }
 
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(bookData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
     private void NavigateToHome()
     {
         NavigationManager.NavigateTo("https://localhost:7293/");
@@ -59,7 +67,13 @@
 
 <h3>Book Data</h3>
 
+<div>
+    <label for="quantityInput">Quantity:</label>
+    <input id="quantityInput" @bind="quantityInput" />
+</div>
+
 <button @onclick="LoadBookData">Load Book Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
 <button @onclick="NavigateToHome">Home</button>
 
 @if (bookData != null)

@@ -1,0 +1,111 @@
+﻿@page "/images"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Datum
+    {
+        public string title { get; set; }
+        public string description { get; set; }
+        public string url { get; set; }
+
+        public string GetUniqueUrl()
+        {
+            return $"{url}?nocache={DateTime.Now.Ticks}";
+        }
+    }
+
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> imageData;
+    private string type = "kittens"; // Default value
+    private int width = 300; // Default value
+    private int height = 300; // Default value
+
+    private async Task LoadImageData()
+    {
+        try
+        {
+            var client = new HttpClient();
+            var timestamp = DateTime.Now.Ticks; // Add timestamp to make each request unique
+            var apiUrl = $"https://fakerapi.it/api/v1/images?_quantity=100&_type={type}&_width={width}&_height={height}&_timestamp={timestamp}";
+            var response = await client.GetAsync(apiUrl);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            HashSet<string> uniqueUrls = new HashSet<string>();
+            imageData = myDeserializedClass.data.Where(image => uniqueUrls.Add(image.url)).ToList();
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(imageData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Image Data</h3>
+
+<div>
+    <label>Type:</label>
+    <select @bind="type">
+        <option value="kittens">Kittens</option>
+        <option value="pokemon">Pokemon</option>
+    </select>
+</div>
+
+<div>
+    <label>Width:</label>
+    <input type="number" @bind="width" />
+</div>
+
+<div>
+    <label>Height:</label>
+    <input type="number" @bind="height" />
+</div>
+
+<button @onclick="LoadImageData">Load Image Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (imageData != null)
+{
+    @foreach (var image in imageData)
+    {
+                <div>
+                    <h4>@image.title</h4>
+                    <p>@image.description</p>
+                    <img src="@image.GetUniqueUrl()" alt="@image.title" />
+                </div>
+    }
+}
+else
+{
+        <p>No data loaded. Click the "Load Image Data" button to load image data.</p>
+}
