@@ -19,6 +19,7 @@
         public string vatId { get; set; }
         public bool boolean { get; set; }
         public int boolean_digit { get; set; }
+        public string buildingNumber { get; set; }
     }
 
     public class Root
@@ -38,7 +39,8 @@
         { "birthday", "date" },
         { "vatId", "vat" },
         { "boolean", "boolean" },
-        { "boolean_digit", "boolean_digit" }
+        { "boolean_digit", "boolean_digit" },
+        { "buildingNumber", "buildingNumber" }
     };
 
     private Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>
@@ -49,7 +51,8 @@
         { "birthday", false },
         { "vatId", false },
         { "boolean", false },
-        { "boolean_digit", false }
+        { "boolean_digit", false },
+        { "buildingNumber", false }
     };
 
     private int quantity = 100; // Default quantity
@@ -138,6 +141,10 @@
             @if (checkboxStates["boolean_digit"])
             {
                 <p>Boolean Digit: @item.boolean_digit</p>
+            }
+            @if (checkboxStates["buildingNumber"])
+            {
+                <p>Building Number: @item.buildingNumber</p>
             }
                 </div>
     }
