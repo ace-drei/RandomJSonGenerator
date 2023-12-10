@@ -22,6 +22,11 @@
         public string buildingNumber { get; set; }
         public string building_number { get; set; }
         public string card_expiration { get; set; }
+        public string card_type { get; set; }
+        public string city { get; set; }
+        public string company_name { get; set; }
+        public int counter { get; set; }
+        public string card_number { get; set; }
     }
 
     public class Root
@@ -44,7 +49,12 @@
         { "boolean_digit", "boolean_digit" },
         { "buildingNumber", "buildingNumber" },
         { "building_number", "building_number" },
-        { "card_expiration", "card_expiration" }
+        { "card_expiration", "card_expiration" },
+        { "card_type", "card_type" },
+        { "city", "city" },
+        { "company_name", "company_name" },
+        { "counter", "counter" },
+        { "card_number", "card_number" }
     };
 
     private Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>
@@ -58,7 +68,12 @@
         { "boolean_digit", false },
         { "buildingNumber", false },
         { "building_number", false },
-        { "card_expiration", false }
+        { "card_expiration", false },
+        { "card_type", false },
+        { "city", false },
+        { "company_name", false },
+        { "counter", false },
+        { "card_number", false }
     };
 
     private int quantity = 5; // Default quantity
@@ -159,6 +174,26 @@
             @if (checkboxStates["card_expiration"])
             {
                 <p>Card Expiration: @item.card_expiration</p>
+            }
+            @if (checkboxStates["card_type"])
+            {
+                <p>Card Type: @item.card_type</p>
+            }
+            @if (checkboxStates["city"])
+            {
+                <p>City: @item.city</p>
+            }
+            @if (checkboxStates["company_name"])
+            {
+                <p>Company Name: @item.company_name</p>
+            }
+            @if (checkboxStates["counter"])
+            {
+                <p>Counter: @item.counter</p>
+            }
+            @if (checkboxStates["card_number"])
+            {
+                <p>Card Number: @item.card_number</p>
             }
                 </div>
     }
