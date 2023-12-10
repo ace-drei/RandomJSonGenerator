@@ -3,6 +3,7 @@
 @using System.Net.Http
 @using Newtonsoft.Json
 @using System.Collections.Generic
+@using System.Linq
 @using System.Threading.Tasks
 @using System
 @inject IJSRuntime JSRuntime
@@ -16,6 +17,7 @@
         public string from { get; set; }
         public string birthday { get; set; }
         public string vatId { get; set; }
+        public bool boolean { get; set; }
     }
 
     public class Root
@@ -33,7 +35,8 @@
         { "surname", "lastName" },
         { "from", "country" },
         { "birthday", "date" },
-        { "vatId", "vat" }
+        { "vatId", "vat" },
+        { "boolean", "boolean" }
     };
 
     private Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>
@@ -42,7 +45,8 @@
         { "surname", false },
         { "from", false },
         { "birthday", false },
-        { "vatId", false }
+        { "vatId", false },
+        { "boolean", false }
     };
 
     private int quantity = 100; // Default quantity
@@ -124,6 +128,10 @@
             @if (checkboxStates["vatId"])
             {
                 <p>VatId: @item.vatId</p>
+            }
+            @if (checkboxStates["boolean"])
+            {
+                <p>Boolean: @item.boolean.ToString()</p>
             }
                 </div>
     }
