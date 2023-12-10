@@ -18,6 +18,7 @@
         public string birthday { get; set; }
         public string vatId { get; set; }
         public bool boolean { get; set; }
+        public int boolean_digit { get; set; }
     }
 
     public class Root
@@ -36,7 +37,8 @@
         { "from", "country" },
         { "birthday", "date" },
         { "vatId", "vat" },
-        { "boolean", "boolean" }
+        { "boolean", "boolean" },
+        { "boolean_digit", "boolean_digit" }
     };
 
     private Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>
@@ -46,7 +48,8 @@
         { "from", false },
         { "birthday", false },
         { "vatId", false },
-        { "boolean", false }
+        { "boolean", false },
+        { "boolean_digit", false }
     };
 
     private int quantity = 100; // Default quantity
@@ -59,8 +62,7 @@
                 .Where(kv => checkboxStates[kv.Key])
                 .Select(kv => $"{kv.Key}={kv.Value}");
 
-            var parameters = string.Join("&", selectedParameters);
-            var apiUrl = $"https://fakerapi.it/api/v1/custom?_quantity={quantity}&{parameters}";
+            var apiUrl = $"https://fakerapi.it/api/v1/custom?_quantity={quantity}&{string.Join("&", selectedParameters)}";
 
             var client = new HttpClient();
             var response = await client.GetAsync(apiUrl);
@@ -131,7 +133,11 @@
             }
             @if (checkboxStates["boolean"])
             {
-                <p>Boolean: @item.boolean.ToString()</p>
+                <p>Boolean: @item.boolean</p>
+            }
+            @if (checkboxStates["boolean_digit"])
+            {
+                <p>Boolean Digit: @item.boolean_digit</p>
             }
                 </div>
     }
