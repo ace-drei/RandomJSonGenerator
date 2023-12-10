@@ -45,6 +45,8 @@
         { "vatId", false }
     };
 
+    private int quantity = 100; // Default quantity
+
     private async Task LoadCustomData()
     {
         try
@@ -54,8 +56,8 @@
                 .Select(kv => $"{kv.Key}={kv.Value}");
 
             var parameters = string.Join("&", selectedParameters);
+            var apiUrl = $"https://fakerapi.it/api/v1/custom?_quantity={quantity}&{parameters}";
 
-            var apiUrl = $"https://fakerapi.it/api/v1/custom?_quantity=100&{parameters}";
             var client = new HttpClient();
             var response = await client.GetAsync(apiUrl);
             response.EnsureSuccessStatusCode();
@@ -86,6 +88,11 @@
 
 <h3>Custom Data</h3>
 
+<div>
+    <label for="quantity">Quantity:</label>
+    <input type="number" @bind="quantity" />
+</div>
+
 @foreach (var parameter in parameterMappings)
 {
         <div>
@@ -106,9 +113,18 @@
     {
                 <div>
                     <h4>@item.name @item.surname</h4>
-                    <p>From: @item.from</p>
-                    <p>Birthday: @item.birthday</p>
-                    <p>VatId: @item.vatId</p>
+            @if (checkboxStates["from"])
+            {
+                <p>From: @item.from</p>
+            }
+            @if (checkboxStates["birthday"])
+            {
+                <p>Birthday: @item.birthday</p>
+            }
+            @if (checkboxStates["vatId"])
+            {
+                <p>VatId: @item.vatId</p>
+            }
                 </div>
     }
 }
