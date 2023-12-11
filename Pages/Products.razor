@@ -78,6 +78,7 @@
 }
 
 <h3>Products Data</h3>
+<p><b>Please note:</b> This page is displayed differently as it contains long text</p>
 
 <div>
     <label for="quantity">Quantity:</label>
@@ -92,13 +93,13 @@
 {
     @foreach (var product in productsData)
     {
-                <div>
-                    <h4>@product.name</h4>
-                    <p>Description: @product.description</p>
-                    <p>EAN: @product.ean</p>
-                    <p>UPC: @product.upc</p>
-                    <p>Net Price: @product.net_price</p>
-                    <p>Price: @product.price</p>
+                <div class="product-container">
+                    <h4><strong>@product.name</strong></h4>
+                    <p><strong>Description:</strong> @product.description</p>
+                    <p><strong>EAN:</strong> @product.ean</p>
+                    <p><strong>UPC:</strong> @product.upc</p>
+                    <p><strong>Net Price:</strong> @product.net_price</p>
+                    <p><strong>Price:</strong> @product.price</p>
                 </div>
     }
 }

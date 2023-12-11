@@ -1,0 +1,34 @@
+﻿@page "/"
+
+<h3>Welcome to the Random Data generator</h3>
+<h4>I wanted to create this website to generate random data. The way this website works is it calls the APIs from Faker API. This can be useful if you want to copy 
+    the data and use it for testing purposes. If you simply click <b> Copy Json to Clipboard </b> it will copy the data to your clipboard. If you want to see the data in a
+    more readable format, click <b> Copy Json to Clipboard </b>.
+</h4>
+<h4> The custom page is where a user can create its own fake data with the custom option, just simply select the desired data required and enter the quantity. Then 
+    simply copy the data to your clipboard with the <b> Copy Json to Clipboard</b> button.
+</h4>
+<h4>Here is a list of all the APIs that are available on this website:</h4>
+<p>X00136864 Andrei Ciobirca CA3 Blazor </p> 
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <NavLink href="/addresses" class="btn btn-primary">Address</NavLink>
+    <NavLink href="/books" class="btn btn-primary">Book Data</NavLink>
+    <NavLink href="/companies" class="btn btn-primary">Companies</NavLink>
+    <NavLink href="/creditcards" class="btn btn-primary">Credit Card</NavLink>
+    <NavLink href="/custom" class="btn btn-primary">Custom Data</NavLink>
+    <NavLink href="/images" class="btn btn-primary">Images</NavLink>
+    <NavLink href="/persons" class="btn btn-primary">Persons</NavLink>
+    <NavLink href="/places" class="btn btn-primary">Places</NavLink>
+    <NavLink href="/products" class="btn btn-primary">Products</NavLink>
+    <NavLink href="/texts" class="btn btn-primary">Texts</NavLink>
+    <NavLink href="/users" class="btn btn-primary">Users</NavLink>
+</div>
+
+@code {
+    private class NavLinkButton
+    {
+        public string To { get; set; }
+        public string Text { get; set; }
+    }
+}

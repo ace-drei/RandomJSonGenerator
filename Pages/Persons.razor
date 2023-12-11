@@ -85,12 +85,12 @@
 
 <h3>Person Data</h3>
 
-<div>
+<div class="input-group">
     <label for="quantity">Quantity:</label>
     <input type="number" id="quantity" @bind="quantity" />
 </div>
 
-<div>
+<div class="input-group">
     <label for="gender">Gender:</label>
     <select id="gender" @bind="gender">
         <option value="male">Male</option>
@@ -98,7 +98,7 @@
     </select>
 </div>
 
-<div>
+<div class="input-group">
     <label for="birthstart">Birth Start:</label>
     <input type="date" id="birthstart" @bind="birthstart" />
 </div>
@@ -109,15 +109,33 @@
 
 @if (personData != null)
 {
-    @foreach (var person in personData)
-    {
-                <div>
-                    <h4>@person.firstname @person.lastname</h4>
-                    <p>@person.email</p>
-                    <p>@person.birthday</p>
-                    <p>@person.gender</p>
-                </div>
-    }
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Birthday</th>
+                    <th>Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var person in personData)
+            {
+                        <tr>
+                            <td>@person.id</td>
+                            <td>@person.firstname</td>
+                            <td>@person.lastname</td>
+                            <td>@person.email</td>
+                            <td>@person.phone</td>
+                            <td>@person.birthday</td>
+                            <td>@person.gender</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
 }
 else
 {

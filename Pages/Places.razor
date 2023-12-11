@@ -73,13 +73,23 @@
 
 @if (placesData != null)
 {
-    @foreach (var place in placesData)
-    {
-                <div>
-                    <p>Latitude: @place.latitude</p>
-                    <p>Longitude: @place.longitude</p>
-                </div>
-    }
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var place in placesData)
+            {
+                        <tr>
+                            <td>@place.latitude</td>
+                            <td>@place.longitude</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
 }
 else
 {
