@@ -17,8 +17,8 @@ jobs:
           dotnet-version: 8.0.100
       - name: Publish .NET Core Project
         run: dotnet publish -c Release -o release --nologo
-      - name: Change base tag in index.html to / to ca3Esports
-        run: sed -i 's/<base href="\/" \/>/<base href="\/ca3Esports\/" \/>/g' release/wwwroot/index.html
+      - name: Change base tag in index.html to / to RandomJSonGenerator
+        run: sed -i 's/<base href="\/" \/>/<base href="\/RandomJSonGenerator\/" \/>/g' release/wwwroot/index.html
       - name: Add nojekyll file
         run: touch release/wwwroot/.nojekyll
       - name: Commit wwwroot to GitHub Pages
