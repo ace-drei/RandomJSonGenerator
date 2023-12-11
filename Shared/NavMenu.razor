@@ -81,8 +81,6 @@
 </div>
 
 @code {
-    [Inject] NavigationManager NavigationManager { get; set; }
-
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -90,10 +88,5 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-    }
-
-    private void NavigateTo(string page)
-    {
-        NavigationManager.NavigateTo(page);
     }
 }
