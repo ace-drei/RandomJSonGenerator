@@ -196,7 +196,7 @@
 
     private void NavigateToHome()
     {
-        NavigationManager.NavigateTo("https://localhost:7293/");
+        NavigationManager.NavigateTo("/");
     }
 }
 
@@ -218,9 +218,9 @@
         </div>
 }
 
-<button @onclick="LoadCustomData">Load Custom Data</button>
-<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
-<button @onclick="NavigateToHome">Home</button>
+<button class="btn btn-primary" @onclick="LoadCustomData">Load Custom Data</button>
+<button class="btn btn-primary" @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button class="btn btn-secondary" @onclick="NavigateToHome">Home</button>
 
 @if (customData != null)
 {

@@ -5,6 +5,7 @@
 @using System.Collections.Generic
 @using System.Threading.Tasks
 @using System
+@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
 @code {
@@ -53,9 +54,15 @@
         }
     }
 
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(addressData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
     private void NavigateToHome()
     {
-        NavigationManager.NavigateTo("https://localhost:7293/");
+        NavigationManager.NavigateTo("/");
     }
 }
 
@@ -66,8 +73,9 @@
     <input type="number" id="quantity" @bind="quantity" />
 </div>
 
-<button @onclick="LoadAddressData">Load Address Data</button>
-<button @onclick="NavigateToHome">Home</button>
+<button class="btn btn-primary" @onclick="LoadAddressData">Load Address Data</button>
+<button class="btn btn-primary" @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button class="btn btn-secondary" @onclick="NavigateToHome">Home</button>
 
 @if (addressData != null)
 {

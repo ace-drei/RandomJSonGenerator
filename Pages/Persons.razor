@@ -79,7 +79,7 @@
 
     private void NavigateToHome()
     {
-        NavigationManager.NavigateTo("https://localhost:7293/");
+        NavigationManager.NavigateTo("/");
     }
 }
 
@@ -103,9 +103,9 @@
     <input type="date" id="birthstart" @bind="birthstart" />
 </div>
 
-<button @onclick="LoadPersonData">Load Person Data</button>
-<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
-<button @onclick="NavigateToHome">Home</button>
+<button class="btn btn-primary" @onclick="LoadPersonData">Load Person Data</button>
+<button class="btn btn-primary" @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button class="btn btn-secondary" @onclick="NavigateToHome">Home</button>
 
 @if (personData != null)
 {

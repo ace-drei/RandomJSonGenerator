@@ -56,7 +56,7 @@
 
     private void NavigateToHome()
     {
-        NavigationManager.NavigateTo("https://localhost:7293/");
+        NavigationManager.NavigateTo("/");
     }
 }
 
@@ -67,9 +67,9 @@
     <input type="number" @bind="quantity" />
 </div>
 
-<button @onclick="LoadPlacesData">Load Places Data</button>
-<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
-<button @onclick="NavigateToHome">Home</button>
+<button class="btn btn-primary" @onclick="LoadPlacesData">Load Places Data</button>
+<button class="btn btn-primary" @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button class="btn btn-secondary" @onclick="NavigateToHome">Home</button>
 
 @if (placesData != null)
 {
