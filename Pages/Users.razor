@@ -1,4 +1,4 @@
-﻿@page "/persons"
+﻿@page "/users"
 
 @using System.Net.Http
 @using Newtonsoft.Json
@@ -9,30 +9,17 @@
 @inject NavigationManager NavigationManager
 
 @code {
-    public class Address
-    {
-        public int id { get; set; }
-        public string street { get; set; }
-        public string streetName { get; set; }
-        public string buildingNumber { get; set; }
-        public string city { get; set; }
-        public string zipcode { get; set; }
-        public string country { get; set; }
-        public string county_code { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
-    }
-
     public class Datum
     {
         public int id { get; set; }
+        public string uuid { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
         public string email { get; set; }
-        public string phone { get; set; }
-        public string birthday { get; set; }
-        public string gender { get; set; }
-        public Address address { get; set; }
+        public string ip { get; set; }
+        public string macAddress { get; set; }
         public string website { get; set; }
         public string image { get; set; }
     }
@@ -45,16 +32,16 @@
         public List<Datum> data { get; set; }
     }
 
-    private List<Datum> personData;
-    private int quantity = 100;
-    private string gender = "male";
-    private DateTime birthstart = new DateTime(2005, 01, 01);
+    private List<Datum> usersData;
+    private int quantity = 5; // Default quantity
+    private string selectedGender = "male"; // Default gender
 
-    private async Task LoadPersonData()
+    private async Task LoadUsersData()
     {
         try
         {
-            var apiUrl = $"https://fakerapi.it/api/v1/persons?_quantity={quantity}&_gender={gender}&_birthday_start={birthstart:yyyy-MM-dd}";
+            var apiUrl = $"https://fakerapi.it/api/v1/users?_quantity={quantity}&_gender={selectedGender}";
+
             var client = new HttpClient();
             var response = await client.GetAsync(apiUrl);
             response.EnsureSuccessStatusCode();
@@ -62,7 +49,7 @@
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
 
-            personData = myDeserializedClass.data;
+            usersData = myDeserializedClass.data;
         }
         catch (Exception ex)
         {
@@ -73,7 +60,7 @@
 
     private async Task CopyJsonToClipboard()
     {
-        var jsonString = JsonConvert.SerializeObject(personData, Formatting.Indented);
+        var jsonString = JsonConvert.SerializeObject(usersData, Formatting.Indented);
         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
     }
 
@@ -83,43 +70,44 @@
     }
 }
 
-<h3>Person Data</h3>
+<h3>Users Data</h3>
 
 <div>
     <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" @bind="quantity" />
+    <input type="number" @bind="quantity" />
 </div>
 
 <div>
     <label for="gender">Gender:</label>
-    <select id="gender" @bind="gender">
+    <select @bind="selectedGender">
         <option value="male">Male</option>
         <option value="female">Female</option>
     </select>
 </div>
 
-<div>
-    <label for="birthstart">Birth Start:</label>
-    <input type="date" id="birthstart" @bind="birthstart" />
-</div>
-
-<button @onclick="LoadPersonData">Load Person Data</button>
+<button @onclick="LoadUsersData">Load Users Data</button>
 <button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
 <button @onclick="NavigateToHome">Home</button>
 
-@if (personData != null)
+@if (usersData != null)
 {
-    @foreach (var person in personData)
+    @foreach (var user in usersData)
     {
                 <div>
-                    <h4>@person.firstname @person.lastname</h4>
-                    <p>@person.email</p>
-                    <p>@person.birthday</p>
-                    <p>@person.gender</p>
+                    <p>ID: @user.id</p>
+                    <p>UUID: @user.uuid</p>
+                    <p>First Name: @user.firstname</p>
+                    <p>Last Name: @user.lastname</p>
+                    <p>Username: @user.username</p>
+                    <p>Email: @user.email</p>
+                    <p>IP: @user.ip</p>
+                    <p>Mac Address: @user.macAddress</p>
+                    <p>Website: @user.website</p>
+                    <p>Image: @user.image</p>
                 </div>
     }
 }
 else
 {
-        <p>No data loaded. Click the "Load Person Data" button to load person data.</p>
+        <p>No data loaded. Click the "Load Users Data" button to load users data.</p>
 }

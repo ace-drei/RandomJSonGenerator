@@ -1,0 +1,108 @@
+﻿@page "/products"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Datum
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public string ean { get; set; }
+        public string upc { get; set; }
+        public string image { get; set; }
+        public List<Image> images { get; set; }
+        public double net_price { get; set; }
+        public string price { get; set; }
+        public List<string> categories { get; set; }
+        public List<string> tags { get; set; }
+    }
+
+    public class Image
+    {
+        public string title { get; set; }
+        public string description { get; set; }
+        public string url { get; set; }
+    }
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> productsData;
+    private int quantity = 5; // Default quantity
+    private readonly string uuid = Guid.NewGuid().ToString("N");
+
+    private async Task LoadProductsData()
+    {
+        try
+        {
+            var apiUrl = $"https://fakerapi.it/api/v1/products?_quantity={quantity}&_categories_type=uuid&_uuid={uuid}";
+
+            var client = new HttpClient();
+            var response = await client.GetAsync(apiUrl);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            productsData = myDeserializedClass.data;
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(productsData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Products Data</h3>
+
+<div>
+    <label for="quantity">Quantity:</label>
+    <input type="number" @bind="quantity" />
+</div>
+
+<button @onclick="LoadProductsData">Load Products Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (productsData != null)
+{
+    @foreach (var product in productsData)
+    {
+                <div>
+                    <h4>@product.name</h4>
+                    <p>Description: @product.description</p>
+                    <p>EAN: @product.ean</p>
+                    <p>UPC: @product.upc</p>
+                    <p>Net Price: @product.net_price</p>
+                    <p>Price: @product.price</p>
+                </div>
+    }
+}
+else
+{
+        <p>No data loaded. Click the "Load Products Data" button to load products data.</p>
+}

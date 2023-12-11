@@ -1,0 +1,91 @@
+﻿@page "/texts"
+
+@using System.Net.Http
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using System
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+@code {
+    public class Datum
+    {
+        public string title { get; set; }
+        public string author { get; set; }
+        public string genre { get; set; }
+        public string content { get; set; }
+    }
+
+    public class Root
+    {
+        public string status { get; set; }
+        public int code { get; set; }
+        public int total { get; set; }
+        public List<Datum> data { get; set; }
+    }
+
+    private List<Datum> textsData;
+    private int quantity = 5; // Default quantity
+
+    private async Task LoadTextsData()
+    {
+        try
+        {
+            var apiUrl = $"https://fakerapi.it/api/v1/texts?_quantity={quantity}&_characters=500";
+
+            var client = new HttpClient();
+            var response = await client.GetAsync(apiUrl);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var myDeserializedClass = JsonConvert.DeserializeObject<Root>(jsonResponse);
+
+            textsData = myDeserializedClass.data;
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions (e.g., log, display an error message)
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task CopyJsonToClipboard()
+    {
+        var jsonString = JsonConvert.SerializeObject(textsData, Formatting.Indented);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("https://localhost:7293/");
+    }
+}
+
+<h3>Texts Data</h3>
+
+<div>
+    <label for="quantity">Quantity:</label>
+    <input type="number" @bind="quantity" />
+</div>
+
+<button @onclick="LoadTextsData">Load Texts Data</button>
+<button @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
+<button @onclick="NavigateToHome">Home</button>
+
+@if (textsData != null)
+{
+    @foreach (var text in textsData)
+    {
+                <div>
+                    <h4>Title: @text.title</h4>
+                    <p>Author: @text.author</p>
+                    <p>Genre: @text.genre</p>
+                    <p>Content: @text.content</p>
+                </div>
+    }
+}
+else
+{
+        <p>No data loaded. Click the "Load Texts Data" button to load texts data.</p>
+}
