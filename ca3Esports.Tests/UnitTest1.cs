@@ -82,7 +82,7 @@ public class Tests : PageTest
 
 
     [Test]
-    public async Task MyTest()
+    public async Task DisplayDOBAsOlderThanStandard2005()
     {
         await Page.GotoAsync("https://ace-drei.github.io/RandomJSonGenerator/");
 

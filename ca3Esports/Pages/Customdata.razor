@@ -31,7 +31,6 @@
         public string countryCode { get; set; }
         public string country_code { get; set; }
         public string date { get; set; }
-        public DateTime dateTime { get; set; }
         public string ean { get; set; }
         public string email { get; set; }
         public string image { get; set; }
@@ -87,7 +86,6 @@
         { "countryCode", "countryCode" },
         { "country_code", "country_code" },
         { "date", "date" },
-        { "dateTime", "dateTime" },
         { "ean", "ean" },
         { "email", "email" },
         { "image", "image" },
@@ -134,7 +132,6 @@
         { "countryCode", false },
         { "country_code", false },
         { "date", false },
-        { "dateTime", false },
         { "ean", false },
         { "email", false },
         { "image", false },
@@ -309,11 +306,6 @@
             @if (checkboxStates["date"])
             {
                             <p>Date: @item.date</p>
-            }
-
-            @if (checkboxStates["dateTime"])
-            {
-                            <p>DateTime: @item.dateTime.Date @item.dateTime.ToString("HH:mm:ss") @item.dateTime.ToString("zzz")</p>
             }
 
             @if (checkboxStates["ean"])
