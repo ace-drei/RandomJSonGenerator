@@ -61,12 +61,12 @@
 
 <h3>Credit Card Data</h3>
 
-<div class="form-group">
-    <label for="quantityInput">Quantity:</label>
-    <input type="text" class="form-control" id="quantityInput" @bind="quantity" />
+<div>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" @bind="quantity" />
 </div>
 
-<button class="btn btn-primary" @onclick="LoadCreditCardData">Load Credit Card Data</button>
+<button class="btn btn-primary" @onclick="LoadCreditCardData">Load Address Data</button>
 <button class="btn btn-primary" @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
 
 
