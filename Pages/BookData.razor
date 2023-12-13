@@ -59,10 +59,7 @@
         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", jsonString);
     }
 
-    private void NavigateToHome()
-    {
-        NavigationManager.NavigateTo("/");
-    }
+
 }
 
 <h3>Book Data</h3>
@@ -74,7 +71,7 @@
 
 <button class="btn btn-primary" @onclick="LoadBookData">Load Book Data</button>
 <button class="btn btn-primary" @onclick="CopyJsonToClipboard">Copy JSON to Clipboard</button>
-<button class="btn btn-secondary"@onclick="NavigateToHome">Home</button>
+
 
 @if (bookData != null)
 {
